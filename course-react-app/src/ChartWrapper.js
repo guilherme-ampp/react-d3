@@ -1,18 +1,22 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import React, {Component} from 'react';
+import React, {useRef, useState, useEffect} from 'react';
 import D3Chart from './D3Chart'
 
-export default class ChartWrapper extends Component {
-    constructor(props) {
-        super(props);
-        this.chartRef = React.createRef();
-    }
+const ChartWrapper = () => {
+    const chartArea = useRef(null);
+    const [chart, setChart] = useState(null);
 
-    componentDidMount() {
-        new D3Chart(this.chartRef);
-    };
+    useEffect(() => {
+        if (!chart) {
+            setChart(new D3Chart(chartArea.current));
+        } else {
+            chart.update();
+        }
+    }, [chart]);
 
-    render() {
-        return <div ref={this.chartRef}></div>
-    }
+    return (
+        <div ref={chartArea}></div>
+    )
 };
+
+export default ChartWrapper;
