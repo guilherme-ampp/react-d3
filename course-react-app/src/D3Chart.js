@@ -1,6 +1,6 @@
 import * as d3 from 'd3';
 
-const data = [20, 15, 26, 35, 10];
+const dataURL = "https://udemy-react-d3.firebaseio.com/ages.json";
 
 export default class D3Chart {
 
@@ -10,16 +10,18 @@ export default class D3Chart {
                             .attr("width", 500)
                             .attr("height", 500);
         
-        const rects = svg.selectAll("rect")
-            .data(data);
+        d3.json(dataURL).then((agesData) => {
+            const rects = svg.selectAll("rect")
+            .data(agesData);
 
-        rects.enter()
-            .append("rect")
-                .attr("x", (d, i) => i * 100)
-                .attr("y", 50)
-                .attr("height", d => d)
-                .attr("width", 50)
-                .attr("fill", d => d > 15 ? "gray" : "red");
+            rects.enter()
+                .append("rect")
+                    .attr("x", (d, i) => i * 100)
+                    .attr("y", 50)
+                    .attr("height", d => parseInt(d.age) * 10)
+                    .attr("width", 50)
+                    .attr("fill", d => parseInt(d.age) > 10 ? "red" : "green");
+        });
     }
 
     update() {
